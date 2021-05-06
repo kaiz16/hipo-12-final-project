@@ -14,34 +14,43 @@ const installPassport = (app) => {
   passport.serializeUser(User.serializeUser());
   passport.deserializeUser(User.deserializeUser());
   passport.use(new LocalStrategy(User.authenticate()));
+  
+  // Renders
 
-  // app.get("/", function (req, res) {
-  //   res.render("home");
-  // });
+  app.get('/auth/success', (req, res) => {
+    res.send("Tinder For Pets - LOGGED IN COMPLETE");
+  });
 
-  // app.get("/secret", isLoggedIn, function (req, res) {
-  //   res.render("secret");
-  // });
+  app.get('/auth/fail', (req, res) => {
+    res.send("Tinder For Pets - LOGGED IN FAIL");
+  });
 
-  // app.get("/register", function (req, res) {
-  //   res.render("register");
-  // });
+  app.get('/auth/registered', (req, res) => {
+    res.send("Tinder For Pets - You already have an account. Go to /login");
+  });
 
+  app.get("/logout", function (req, res) {
+    req.logout();
+    res.redirect("/");
+  });
+  
+  // Post Requests
   app.post("/register", function (req, res) {
+    console.log(req.query)
     User.register(
-      new Users({
-        email: req.body.email,
-        username: req.body.username,
-        password: req.body.password,
+      new User({
+        email: req.query.email,
+        username: req.query.username,
+        password: req.query.password,
       }),
-      req.body.password,
+      req.query.password,
       function (err, user) {
         if (err) {
-          console.log(err);
-          return res.render("register");
+          console.log("error is",err);
+          return res.redirect('/auth/registered');
         }
         passport.authenticate("local")(req, res, function () {
-          res.redirect("/secret");
+          res.redirect("/auth/success");
         });
       }
     );
@@ -50,23 +59,12 @@ const installPassport = (app) => {
   app.post(
     "/login",
     passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/login",
+      successRedirect: "/auth/success",
+      failureRedirect: "/auth/fail",
     }),
     function (req, res) {}
   );
 
-  app.get("/logout", function (req, res) {
-    req.logout();
-    res.redirect("/");
-  });
-
-  function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.redirect("/login");
-  }
 };
 
 module.exports = {

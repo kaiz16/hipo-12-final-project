@@ -21,8 +21,6 @@ mongoose.connection.on("open", () => {
 
 app.use(routes.router);
 
-// app.set("view engine","ejs");
-
 app.get("/", (req, res) => {
   res.send("Tinder For Pets - Backend");
 });
