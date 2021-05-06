@@ -16,7 +16,6 @@ const installPassport = (app) => {
   passport.use(new LocalStrategy(User.authenticate()));
   
   // Renders
-
   app.get('/auth/success', (req, res) => {
     res.send("Tinder For Pets - LOGGED IN COMPLETE");
   });
@@ -41,7 +40,6 @@ const installPassport = (app) => {
       new User({
         email: req.query.email,
         username: req.query.username,
-        password: req.query.password,
       }),
       req.query.password,
       function (err, user) {
