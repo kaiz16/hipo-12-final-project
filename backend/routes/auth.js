@@ -16,7 +16,7 @@ const installPassport = (app) => {
   passport.use(new LocalStrategy(User.authenticate()));
   
   // Renders
-  app.get('/auth/success', ensureAuthenticated, (req, res) => {
+  app.get('/auth/success', (req, res) => {
     res.send("Tinder For Pets - LOGGED IN COMPLETE");
   });
 
@@ -32,7 +32,6 @@ const installPassport = (app) => {
     req.logout();
     res.redirect("/");
   });
-  SE
   app.post("/register", function (req, res) {
     console.log(req.query)
     User.register(
@@ -65,7 +64,8 @@ const installPassport = (app) => {
 
 const ensureAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()) return next();
-  else res.redirect('/login')
+  else throw 'Login first'
+  // res.redirect(307, '/login')
 }
 
 module.exports = {

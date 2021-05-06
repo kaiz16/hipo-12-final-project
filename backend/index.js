@@ -8,6 +8,8 @@ const mongoose = require("mongoose");
 const Users = require("./Models/User");
 const app = express();
 
+app.use(express.json())
+
 mongoose.connect(process.env.MongoDB, {
   useCreateIndex: true,
   useFindAndModify: true,
@@ -20,6 +22,7 @@ mongoose.connection.on("open", () => {
 });
 
 app.use(routes.router);
+app.use('', require('./routes/pets.js'))
 
 app.get("/", (req, res) => {
   res.send("Tinder For Pets - Backend");
