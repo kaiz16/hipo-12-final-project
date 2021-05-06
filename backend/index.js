@@ -9,6 +9,8 @@ const MongoStore = require('connect-mongo');
 const { ensureAuthenticated } = require("./routes/auth");
 const app = express();
 
+app.use(express.json())
+
 mongoose.connect(process.env.MongoDB, {
   useCreateIndex: true,
   useFindAndModify: true,
@@ -37,6 +39,7 @@ app.use(session({
 
 // Routes
 app.use(routes.router);
+app.use('', require('./routes/pets.js'))
 
 app.get("/", (req, res) => {
   res.send("Tinder For Pets - Backend");

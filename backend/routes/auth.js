@@ -32,7 +32,6 @@ const installPassport = (app) => {
     req.logout();
     res.redirect("/");
   });
-
   app.post("/register", function (req, res) {
     console.log(req.query)
     User.register(
