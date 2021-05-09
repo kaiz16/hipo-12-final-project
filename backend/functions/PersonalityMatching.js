@@ -6,7 +6,7 @@ export async function getSimilarPersonalities(petPersonality) {
     const petPersonalities = await personalities.find({});
     for (var personality of petPersonalities) {
         if (petPersonality == personality) {
-            var newMatch = new matches({ userId1: petPersonality.userId, userId2:personality.userId,personalityId:personality});
+            var newMatch = new matches({ petIdUser: petPersonality.petId, petIdMatch:personality.petId, personalityType:personality});
             newMatch.save(function (err) {
                 if (err) {
                     console.log(err)
@@ -17,4 +17,3 @@ export async function getSimilarPersonalities(petPersonality) {
 
     }
 }
-

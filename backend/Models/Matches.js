@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const matchesSchema = new Schema({
-    userId1: {
+    petIdUser: {
       type: String,
       required: true,
     },
-    userId2: {
+    petIdMatch: {
       type: String,
       required: true
     },
-    personalityId: {
+    personalityType: {
         type: String,
         required: true
     }

@@ -6,7 +6,7 @@ const personalitySchema = new Schema({
       type: String,
       required: true,
     },
-    userId: {
+    petId: {
       type: String,
       required: true
     },
