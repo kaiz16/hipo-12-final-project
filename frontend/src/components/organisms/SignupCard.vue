@@ -1,26 +1,24 @@
 <template>
   <vs-card>
     <template #title>
-      <h3>Login Now</h3>
+      <h3>Signup Now</h3>
     </template>
     <template #img>
       <img src="/foto5.png" alt="" />
     </template>
     <template #text>
+      <vs-input v-model="name" placeholder="Name" />
+
       <vs-input v-model="email" placeholder="Evan You" />
 
       <vs-input v-model="password" type="password" placeholder="Evan You" />
-      <vs-button
-        @click="login()"
-      >
-        Login
+      <vs-button @click="signup()">
+        Signup
       </vs-button>
-      <p>Don't have an account? <br>
-      <router-link to="/signup">Signup now!</router-link></p>
-    </template>
-    <template #interactions>
+
       
     </template>
+    <template #interactions> </template>
   </vs-card>
 </template>
 
@@ -28,15 +26,16 @@
 export default {
   data() {
     return {
+      name: "",
       email: "",
       password: "",
     };
   },
   methods: {
-    login(){
-      console.log('Logged in')
-    }
-  }
+    signup() {
+      console.log("Sign up now");
+    },
+  },
 };
 </script>
 
