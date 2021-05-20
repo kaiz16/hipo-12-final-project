@@ -1,0 +1,44 @@
+[
+    {
+        "id": 0,
+        "personalityId": 0,
+        "pet1Id": 0,
+        "pet2Id": 1
+    },
+    {
+        "id": 0,
+        "personalityId": 0,
+        "pet1Id": 0,
+        "pet2Id": 2
+    },
+    {
+        "id": 0,
+        "personalityId": 0,
+        "pet1Id": 0,
+        "pet2Id": 3
+    },
+    {
+        "id": 0,
+        "personalityId": 0,
+        "pet1Id": 0,
+        "pet2Id": 4
+    },
+    {
+        "id": 0,
+        "personalityId": 0,
+        "pet1Id": 0,
+        "pet2Id": 5
+    },
+    {
+        "id": 0,
+        "personalityId": 0,
+        "pet1Id": 0,
+        "pet2Id": 6
+    },
+    {
+        "id": 0,
+        "personalityId": 0,
+        "pet1Id": 0,
+        "pet2Id": 7
+    }
+]

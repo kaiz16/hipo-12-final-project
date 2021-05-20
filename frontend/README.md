@@ -1,4 +1,4 @@
-# frontend
+# tinderforpets
 
 ## Project setup
 ```
