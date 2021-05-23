@@ -16,7 +16,7 @@ const installPassport = (app) => {
   passport.use(new LocalStrategy(User.authenticate()));
   
   // Renders
-  app.get('/auth/success', (req, res) => {
+  app.get('/auth/success', ensureAuthenticated,(req, res) => {
     res.send("Tinder For Pets - LOGGED IN COMPLETE");
   });
 
@@ -33,13 +33,13 @@ const installPassport = (app) => {
     res.redirect("/");
   });
   app.post("/register", function (req, res) {
-    console.log(req.query)
+    console.log(req.body)
     User.register(
       new User({
-        email: req.query.email,
-        username: req.query.username,
+        email: req.body.email,
+        username: req.body.username,
       }),
-      req.query.password,
+      req.body.password,
       function (err, user) {
         if (err) {
           console.log("error is",err);
@@ -63,7 +63,6 @@ const installPassport = (app) => {
 };
 
 const ensureAuthenticated = function(req, res, next) {
-  console.log(req)
   if (req.isAuthenticated()) return next();
   else res.redirect('/auth/fail')
 }

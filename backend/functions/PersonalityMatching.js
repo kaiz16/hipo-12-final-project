@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const personalities = require('../Models/Personalities')
 const matches = require('../Models/Matches')
 
-export async function getSimilarPersonalities(petPersonality) {
+module.exports = async function getSimilarPersonalities(petPersonality) {
     const petPersonalities = await personalities.find({});
     for (var personality of petPersonalities) {
         if (petPersonality == personality) {

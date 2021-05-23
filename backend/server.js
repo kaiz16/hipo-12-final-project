@@ -44,6 +44,7 @@ app.use('', require('./routes/pets.js'))
 app.get("/", (req, res) => {
   res.send("Tinder For Pets - Backend");
 });
+
 app.get("/test", ensureAuthenticated, (req, res) => {
   res.send("Tinder For Pets - Backend has ensured authenticated");
 });
