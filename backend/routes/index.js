@@ -1,5 +1,5 @@
 const express = require('express'); 
-const user = require('./User');
+const user = require('./user');
 const auth = require('./auth')
 const pets = require('./pets')
 

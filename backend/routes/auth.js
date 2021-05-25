@@ -21,7 +21,7 @@ const installPassport = (app) => {
   });
 
   app.get('/auth/fail', (req, res) => {
-    res.send("Tinder For Pets - LOGGED IN FAIL");
+    res.status(400).json("Tinder For Pets - LOGGED IN FAIL");
   });
 
   app.get('/auth/registered', (req, res) => {
@@ -32,6 +32,11 @@ const installPassport = (app) => {
     req.logout();
     res.redirect("/");
   });
+
+  app.get("/me", ensureAuthenticated, function (req, res) {
+    res.json(req.user);
+  });
+
   app.post("/register", function (req, res) {
     console.log(req.body)
     User.register(

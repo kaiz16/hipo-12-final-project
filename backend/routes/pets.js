@@ -7,9 +7,16 @@ const Matches = require("../Models/Matches.js")
 const Meetups = require("../Models/Meetups.js")
 const { ensureAuthenticated } = require("./auth.js");
 
-router.get("/pets", ensureAuthenticated, async (req, res) => {
-  let pets = await Pets.find({});
-  res.json(pets);
+// ? makes the route parameter optional
+router.get("/pets/:userId?", ensureAuthenticated, async (req, res) => {
+  if (!req.params.userId){
+    let pets = await Pets.find({});
+    return res.json(pets);
+  }else{
+    let pets = await Pets.find({userId: req.params.userId});
+    return res.json(pets);
+  }
+  
 });
 
 router.get("/personalities", ensureAuthenticated, async (req, res) => {
