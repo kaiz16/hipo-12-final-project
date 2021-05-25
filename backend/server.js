@@ -11,8 +11,8 @@ const app = express();
 
 var corsOptions = {
   credentials: true,
-  origin: 'http://localhost:8081'
-}
+  origin: /^http:\/\/localhost:.*/,
+};
 app.use(cors(corsOptions));
 app.use(express.json());
 
