@@ -4,6 +4,7 @@ const router = express.Router();
 const Pets = require("../Models/Pets.js");
 const Personalities = require("../Models/Personalities.js")
 const Matches = require("../Models/Matches.js")
+const Meetups = require("../Models/Meetups.js")
 const { ensureAuthenticated } = require("./auth.js");
 
 router.get("/pets", ensureAuthenticated, async (req, res) => {
@@ -50,6 +51,17 @@ router.get("/pets/matches", ensureAuthenticated, async (req, res) => {
   res.json(petMatchesIds)
 });
 
+router.get("/pets/meetups", ensureAuthenticated, async (req, res) => {
+
+  let { petId } = req.body;
+
+  let petMeetups = await Meetups.find({
+    petIdUser: petId
+  })
+
+  res.json(petMeetups)
+});
+
 router.post("/create", ensureAuthenticated, async (req, res) => {
   let { name, userId } = req.body;
   let pet = new Pets({
@@ -89,11 +101,45 @@ router.post("/create/match", ensureAuthenticated, async (req, res) => {
   res.json(newMatch)
 });
 
+router.post("/create/meetup", ensureAuthenticated, async (req, res) => {
+  console.log(req.body)
+  let { location, petId, petMatchId, matchId} = req.body;
+  let newMeetup = new Meetups({
+    location: location,
+    petIdUser: petId,
+    petIdMatch: matchId,
+    personalityType: personality
+  })
+
+  await newMeetup.save();
+
+  res.json(newMeetup)
+});
+
 router.delete("/delete", ensureAuthenticated, async (req, res) => {
   let { id } = req.body;
   await Pets.findByIdAndDelete({ _id: id });
   res.json("Ok");
 });
+
+router.delete("/delete/personality", ensureAuthenticated, async (req, res) => {
+  let { id } = req.body;
+  await Personalities.findByIdAndDelete({ _id: id });
+  res.json("Ok");
+});
+
+router.delete("/delete/match", ensureAuthenticated, async (req, res) => {
+  let { id } = req.body;
+  await Matches.findByIdAndDelete({ _id: id });
+  res.json("Ok");
+});
+
+router.delete("/delete/meetup", ensureAuthenticated, async (req, res) => {
+  let { id } = req.body;
+  await Meetups.findByIdAndDelete({ _id: id });
+  res.json("Ok");
+});
+
 
 async function getIdByPersonality(personality, petId){
   console.log("personality",personality)
