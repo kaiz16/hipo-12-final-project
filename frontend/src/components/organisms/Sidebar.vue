@@ -18,18 +18,15 @@
     <template #footer>
       <vs-row justify="space-between">
         <vs-avatar @click="gotoProfile">
-          <img :src="require('@/' + me.picture)" alt="" />
+          <template #text>
+            {{ $auth.user ? $auth.user.username : "A" }}
+          </template>
         </vs-avatar>
-
-        <!-- <vs-avatar @click="toggleTheme" badge-color="danger" badge-position="top-right">
-            <box-icon type='solid' name='moon'></box-icon>
-
-            <template #badge>
-              28
-            </template>
-          </vs-avatar> -->
-        <vs-button class="btn-chat" shadow primary @click="toggleTheme">
+        <vs-button shadow primary @click="toggleTheme">
           <i class="bx bx-moon"></i>
+        </vs-button>
+        <vs-button shadow primary @click="$auth.logout()">
+          <i class="bx bx-exit"></i>
         </vs-button>
       </vs-row>
     </template>

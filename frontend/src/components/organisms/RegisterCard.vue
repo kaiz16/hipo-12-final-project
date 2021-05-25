@@ -1,7 +1,7 @@
 <template>
   <vs-card>
     <template #title>
-      <h3>Login Now</h3>
+      <h3>Register Now</h3>
     </template>
     <template #img>
       <img src="/foto5.png" alt="" />
@@ -11,12 +11,12 @@
       <vs-input v-model="email" placeholder="Email" />
 
       <vs-input v-model="password" type="password" placeholder="Password" />
-      <vs-button @click="$auth.login({ email, username, password })">
-        Login
+      <vs-button @click="$auth.register({ email, username, password })">
+        Register
       </vs-button>
       <p>
-        Don't have an account? <br />
-        <a href="#" @click="$emit('register')">Register now!</a>
+        Already have an account? <br />
+        <a href="#" @click="$emit('login')">Login now!</a>
       </p>
     </template>
     <template #interactions> </template>

@@ -6,12 +6,14 @@ import "boxicons";
 import "boxicons/css/boxicons.min.css";
 import "vuesax/dist/vuesax.css"; //Vuesax styles
 import { routes } from './router/routes'
+import { authPlugin } from "@/plugins/auth";
+
 Vue.config.productionTip = false;
 import './styles/styles.css'
 Vue.use(Vuesax, {
   // options here
 });
-
+Vue.use(authPlugin)
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes, // short for `routes: routes`
