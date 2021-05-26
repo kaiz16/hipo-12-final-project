@@ -45,7 +45,7 @@ router.post("/pets/create", ensureAuthenticated, async (req, res) => {
 
 router.post("/pets/update/:petId", ensureAuthenticated, async (req, res) => {
   let { name, city, personalities, type, breed, bio } = req.body;
-  personalities = filterPersonalities(personalities);
+  personalities = await filterPersonalities(personalities);
   const filter = { _id: req.params.petId };
   const pet = await Pets.findOneAndUpdate(
     filter,

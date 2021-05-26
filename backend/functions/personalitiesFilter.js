@@ -1,9 +1,10 @@
-const personalities = require('../Models/Personalities')
+const personalities = require("../Models/Personalities");
 
 const filterPersonalities = async (petPersonalities) => {
-    const ALLOWED_PERSONALITIES = await personalities.find({});
-    return petPersonalities.filter(personality => ALLOWED_PERSONALITIES.includes(personality))
-}
+  const ALL_PERSONALITIES = await personalities.find({});
+  const ALLOWED_PERSONALITIES = ALL_PERSONALITIES.map(p => p.personality)
+  return petPersonalities.filter((personality) => ALLOWED_PERSONALITIES.includes(personality));
+};
 module.exports = {
-    filterPersonalities
-}
+  filterPersonalities,
+};
