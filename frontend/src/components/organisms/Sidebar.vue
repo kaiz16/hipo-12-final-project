@@ -9,11 +9,11 @@
       </template>
       Home
     </vs-sidebar-item>
-    <vs-sidebar-item id="chat">
+    <vs-sidebar-item id="favourites" to="/favourites">
       <template #icon>
-        <i class="bx bxs-chat"></i>
+        <i class="bx bxs-heart"></i>
       </template>
-      Chats
+      Favourites
     </vs-sidebar-item>
     <template #footer>
       <vs-row justify="space-between">

@@ -1,34 +1,42 @@
 <template>
-  <vs-card type="3">
+  <vs-card type="1">
     <template #title>
       <h3>{{ pet.name }}</h3>
     </template>
-
+    <template #img>
+      <img :src="require('@/images/scottish-terrier.jpeg')" alt="" />
+    </template>
     <template #text>
-      <vs-avatar style="height: 100px; width: 100px">
-        <template #text>
-          {{ pet.name }}
-        </template>
-      </vs-avatar>
       <p>
-        {{
-          pet.bio ||
-            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur error aut, dicta vitae minus perferendis eveniet a iusto quo doloribus culpa maiores magnam pariatur molestias accusantium illo exercitationem quas amet."
-        }}
+        {{ pet.bio || "" }}
       </p>
     </template>
     <template #interactions>
-      <vs-button danger icon>
+      <vs-button
+        :primary="isFavourited === true"
+        :shadow="isFavourited === false"
+        icon
+        @click="isFavourited ? unfavouritePet() : favouritePet()"
+        :loading="loading"
+      >
         <i class="bx bx-heart"></i>
       </vs-button>
-      <vs-button class="btn-chat" shadow primary>
-        <i class="bx bx-trash-alt"></i>
+      <vs-button @click="editingPet = true">
+        <i class="bx bx-pencil"></i>
       </vs-button>
+
+      <EditPetCard
+        v-model="editingPet"
+        @cancel="editingPet = false"
+        :pet="pet"
+      />
     </template>
   </vs-card>
 </template>
 
 <script>
+import axios from "axios";
+import EditPetCard from "./EditPetCard.vue";
 export default {
   props: {
     pet: {
@@ -36,7 +44,78 @@ export default {
       required: true,
     },
   },
+  components: {
+    EditPetCard,
+  },
+  data() {
+    return {
+      loading: false,
+      favourite: null,
+      editingPet: false,
+    };
+  },
+  computed: {
+    isFavourited() {
+      return Boolean(this.favourite?._id);
+    },
+  },
+  mounted() {
+    this.isPetFavourited();
+  },
+  methods: {
+    async isPetFavourited() {
+      try {
+        this.loading = true;
+        const { data } = await axios({
+          url: "http://localhost:8080/favourites/" + this.pet._id,
+          method: "GET",
+          withCredentials: true,
+        });
+        this.favourite = data[0];
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async favouritePet() {
+      try {
+        this.loading = true;
+        // eslint-disable-next-line
+        const { data } = await axios({
+          url: "http://localhost:8080/favourites/create",
+          method: "POST",
+          data: {
+            petId: this.pet._id,
+            userId: this.$auth.user._id,
+          },
+          withCredentials: true,
+        });
+        this.isPetFavourited();
+      } catch (e) {
+        console.log(e);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async unfavouritePet() {
+      try {
+        await axios({
+          url: "http://localhost:8080/favourites/delete",
+          method: "POST",
+          data: {
+            id: this.favourite._id,
+          },
+          withCredentials: true,
+        });
+
+        this.isPetFavourited();
+      } catch (e) {
+        console.log(e);
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
 };
 </script>
-
-<style></style>

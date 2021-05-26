@@ -5,7 +5,7 @@
       <i class="bx bx-plus"></i>Add Pet
     </vs-button>
     <AddPetCard
-      v-if="showAddPetCard"
+      v-model="showAddPetCard"
       @cancel="showAddPetCard = false"
       @petCreated="createPet"
     />
@@ -65,7 +65,7 @@ section {
 }
 .user-pets {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
 }

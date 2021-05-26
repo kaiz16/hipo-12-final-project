@@ -1,18 +1,18 @@
 <template>
   <vs-dialog prevent-close v-model="active">
     <template #header>
-      <h3>Fill in these details</h3>
+      <h3>{{ pet.name }}</h3>
     </template>
 
-    <vs-input v-model="name" placeholder="Name" />
-    <vs-input v-model="type" placeholder="Type" />
-    <vs-input v-model="breed" placeholder="Breed" />
-    <vs-input v-model="bio" placeholder="Bio" />
+    <vs-input v-model="pet.name" placeholder="Name" />
+    <vs-input v-model="pet.type" placeholder="What type of pet? Eg: dog, cat" />
+    <vs-input v-model="pet.breed" placeholder="Breed" />
+    <vs-input v-model="pet.bio" placeholder="Bio" type="textarea" />
     <vs-select
       multiple
       :loading="loadingPersonalities"
       placeholder="Personalities"
-      v-model="personalities"
+      v-model="pet.personalities"
     >
       <vs-option
         v-for="(personality, i) in allPersonalities"
@@ -23,8 +23,8 @@
         {{ personality.personality }}
       </vs-option>
     </vs-select>
-    <vs-button @click="addPet" :loading="addPetLoading">
-      Add
+    <vs-button @click="savePet" :loading="savePetLoading">
+      Save Changes
     </vs-button>
     <vs-button @click="$emit('cancel')">
       Cancel
@@ -40,15 +40,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    pet: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
-      name: "",
-      type: "",
-      breed: "",
-      bio: "",
-      personalities: [],
-      addPetLoading: false,
+      savePetLoading: false,
       loadingPersonalities: true,
       allPersonalities: [],
     };
@@ -82,19 +81,18 @@ export default {
         this.loadingPersonalities = false;
       }
     },
-    async addPet() {
+    async savePet() {
       try {
-        this.addPetLoading = true;
+        this.savePetLoading = true;
         const { data } = await axios({
-          url: "http://localhost:8080/pets/create",
+          url: "http://localhost:8080/pets/update/" + this.pet._id,
           method: "POST",
           data: {
-            name: this.name,
-            personalities: this.personalities,
-            type: this.type,
-            breed: this.breed,
-            bio: this.bio,
-            userId: this.$auth.user._id,
+            name: this.pet.name,
+            personalities: this.pet.personalities,
+            type: this.pet.type,
+            breed: this.pet.breed,
+            bio: this.pet.bio,
           },
           withCredentials: true,
         });
@@ -102,7 +100,7 @@ export default {
       } catch (e) {
         console.error(e);
       } finally {
-        this.addPetLoading = false;
+        this.savePetLoading = false;
       }
     },
   },

@@ -1,41 +1,57 @@
 <template>
-  <section v-if="petsByMatches.length">
-    <div v-for="pet in petsByMatches" :key="pet.id" style="margin: 10px">
-      <pet-match-card :pet="pet"></pet-match-card>
+  <Loading v-if="loading"></Loading>
+  <section v-else-if="loading === false && matches.length">
+    <div v-for="pet in matches" :key="pet.id" style="margin: 10px">
+      <PetCard :pet="pet" />
     </div>
+  </section>
+  <section v-else-if="loading === false && matches.length === 0">
+    <p>It's empty</p>
   </section>
 </template>
 
 <script>
-import me from "@/mockdata/me.json";
-import allMatches from "@/mockdata/matches.json";
-import allPets from "@/mockdata/pets.json";
-import PetMatchCard from "../components/organisms/PetMatchCard.vue";
+import axios from "axios";
+import PetCard from "@/components/organisms/PetCard.vue";
+import Loading from "@/components/molecules/Loading.vue";
 export default {
   data() {
     return {
-      me: me,
-      allMatches: allMatches,
-      allPets: allPets,
-      myMatches: [],
-      petsByMatches: [],
+      matches: [],
+      loading: true,
     };
   },
   components: {
-    PetMatchCard,
+    PetCard,
+    Loading,
   },
   mounted() {
-    this.myMatches = this.allMatches.filter(
-      (match) => match.pet1Id === me.id || match.pet2Id === me.id
-    );
-    this.petsByMatches = this.allPets.filter((pet) => {
-      let match = this.myMatches.filter(
-        (match) =>
-          pet.id !== me.id &&
-          (pet.id === match.pet1Id || pet.id === match.pet2Id)
-      )[0];
-      if (match) return match;
-    });
+    this.getMatches();
+  },
+  methods: {
+    async getMatches() {
+      this.loading = true;
+      // First get all user pets
+      const { data } = await axios({
+        url: "http://localhost:8080/pets/" + this.$auth.user._id,
+        method: "GET",
+        withCredentials: true,
+      });
+
+      // loop through each pet & get their matches
+      for (let x = 0; x < data.length; x++) {
+        let pet = data[x];
+        const matches = await axios({
+          url: "http://localhost:8080/matches/" + pet._id,
+          method: "GET",
+          withCredentials: true,
+        });
+
+        this.matches = [...this.matches, ...matches.data];
+      }
+
+      this.loading = false;
+    },
   },
 };
 </script>
@@ -46,5 +62,6 @@ section {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  height: 100%;
 }
 </style>

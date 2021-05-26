@@ -8,7 +8,6 @@ const Auth = () => {
     data() {
       return {
         user: null,
-        loading: false,
       };
     },
     computed: {
@@ -22,7 +21,6 @@ const Auth = () => {
     methods: {
       async fetchUser() {
         try {
-          this.loading = true;
           const { data } = await axios({
             url: "http://localhost:8080/me",
             method: "GET",
@@ -33,15 +31,13 @@ const Auth = () => {
           });
           console.log(data);
           this.user = data;
+          return this.user
         } catch (e) {
           console.error(e);
-        } finally {
-          this.loading = false;
         }
       },
       async register({ email, username, password }) {
         try {
-          this.loading = true;
           await axios({
             url: "http://localhost:8080/register",
             method: "POST",
@@ -58,13 +54,10 @@ const Auth = () => {
           window.location.reload();
         } catch (e) {
           console.error(e);
-        } finally {
-          this.loading = false;
         }
       },
       async login({ email, username, password }) {
         try {
-          this.loading = true;
           await axios({
             url: "http://localhost:8080/login",
             method: "POST",
@@ -81,13 +74,10 @@ const Auth = () => {
           window.location.reload();
         } catch (e) {
           console.error(e);
-        } finally {
-          this.loading = false;
         }
       },
       async logout() {
         try {
-          this.loading = true;
           await axios({
             url: "http://localhost:8080/logout",
             method: "GET",
@@ -99,8 +89,6 @@ const Auth = () => {
           window.location.reload();
         } catch (e) {
           console.error(e);
-        } finally {
-          this.loading = false;
         }
       },
     },

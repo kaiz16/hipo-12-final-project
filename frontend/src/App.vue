@@ -1,11 +1,16 @@
 <template>
-  <div id="app" v-if="$auth.isAnonymous === false">
+  <Loading v-if="loading"></Loading>
+  <div id="app" v-else-if="$auth.isAnonymous === false && loading === false">
     <sidebar />
     <div id="views">
       <router-view></router-view>
     </div>
   </div>
-  <div id="app" class="unauthenticated" v-else>
+  <div
+    id="app"
+    class="unauthenticated"
+    v-else-if="$auth.isAnonymous === true && loading === false"
+  >
     <RegisterCard v-if="registerMode" @login="registerMode = false" />
     <LoginCard v-else @register="registerMode = true" />
   </div>
@@ -15,21 +20,25 @@
 import Sidebar from "./components/organisms/Sidebar.vue";
 import LoginCard from "./components/organisms/LoginCard.vue";
 import RegisterCard from "./components/organisms/RegisterCard.vue";
-
+import Loading from "./components/molecules/Loading.vue";
 export default {
   name: "App",
   components: {
     Sidebar,
     LoginCard,
     RegisterCard,
+    Loading,
   },
   data() {
     return {
       registerMode: false,
+      loading: true,
     };
   },
-  mounted() {
-    this.$auth.fetchUser();
+  async mounted() {
+    this.loading = true;
+    await this.$auth.fetchUser();
+    this.loading = false;
   },
 };
 </script>
