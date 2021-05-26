@@ -2,26 +2,71 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const Pets = require("../Models/Pets.js");
-const Personalities = require("../Models/Personalities.js")
-const Matches = require("../Models/Matches.js")
-const Meetups = require("../Models/Meetups.js")
+const Personalities = require("../Models/Personalities.js");
+const Matches = require("../Models/Matches.js");
+const Meetups = require("../Models/Meetups.js");
 const { ensureAuthenticated } = require("./auth.js");
+const { filterPersonalities } = require("../functions/personalitiesFilter");
+
+// Personalities
+router.get("/personalities", ensureAuthenticated, async (req, res) => {
+  let personalities = await Personalities.find({});
+  res.json(personalities);
+});
 
 // ? makes the route parameter optional
 router.get("/pets/:userId?", ensureAuthenticated, async (req, res) => {
-  if (!req.params.userId){
+  if (!req.params.userId) {
     let pets = await Pets.find({});
     return res.json(pets);
-  }else{
-    let pets = await Pets.find({userId: req.params.userId});
+  } else {
+    let pets = await Pets.find({ userId: req.params.userId });
     return res.json(pets);
   }
-  
 });
 
-router.get("/personalities", ensureAuthenticated, async (req, res) => {
-  let pets = await Personalities.find({});
-  res.json(pets);
+router.post("/pets/create", ensureAuthenticated, async (req, res) => {
+  let { name, userId, city, personalities, type, breed, bio } = req.body;
+  personalities = filterPersonalities(personalities);
+  const pet = new Pets({
+    name,
+    userId,
+    city,
+    personalities,
+    type: type ? type.toUpperCase() : type,
+    breed: breed ? breed.toUpperCase() : breed,
+    bio,
+  });
+
+  await pet.save();
+
+  res.json(pet);
+});
+
+router.post("/pets/update/:petId", ensureAuthenticated, async (req, res) => {
+  let { name, city, personalities, type, breed, bio } = req.body;
+  personalities = filterPersonalities(personalities);
+  const filter = { _id: req.params.petId };
+  const pet = await Pets.findOneAndUpdate(
+    filter,
+    {
+      name,
+      city,
+      personalities,
+      type: type ? type.toUpperCase() : type,
+      breed: breed ? breed.toUpperCase() : breed,
+      bio,
+    },
+    { new: true }
+  );
+
+  res.json(pet);
+});
+
+router.post("/pets/delete", ensureAuthenticated, async (req, res) => {
+  let { id } = req.body;
+  await Pets.findOneAndDelete({ _id: id });
+  res.json("Ok");
 });
 
 router.get("/pets/potential_matches", ensureAuthenticated, async (req, res) => {
@@ -69,18 +114,6 @@ router.get("/pets/meetups", ensureAuthenticated, async (req, res) => {
   res.json(petMeetups)
 });
 
-router.post("/create", ensureAuthenticated, async (req, res) => {
-  let { name, userId } = req.body;
-  let pet = new Pets({
-    name: name,
-    userId: userId,
-  });
-
-  await pet.save();
-
-  res.json(pet);
-});
-
 router.post("/create/personality", ensureAuthenticated, async (req, res) => {
   console.log(req.body)
   let { id, personality } = req.body;
@@ -121,12 +154,6 @@ router.post("/create/meetup", ensureAuthenticated, async (req, res) => {
   await newMeetup.save();
 
   res.json(newMeetup)
-});
-
-router.delete("/delete", ensureAuthenticated, async (req, res) => {
-  let { id } = req.body;
-  await Pets.findByIdAndDelete({ _id: id });
-  res.json("Ok");
 });
 
 router.delete("/delete/personality", ensureAuthenticated, async (req, res) => {

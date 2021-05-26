@@ -21,6 +21,7 @@ mongoose.connect(process.env.MongoDB, {
   useFindAndModify: true,
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  serverSelectionTimeoutMS: 0,
 });
 
 mongoose.connection.on("open", () => {

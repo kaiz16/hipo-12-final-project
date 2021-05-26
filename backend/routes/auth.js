@@ -1,12 +1,7 @@
 require("dotenv").config();
-const express = require("express");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const mongoose = require("mongoose");
 const User = require("../Models/User");
-
-
-
 const installPassport = (app) => {
   app.use(passport.initialize());
   app.use(passport.session());
@@ -17,7 +12,7 @@ const installPassport = (app) => {
   
   // Renders
   app.get('/auth/success', ensureAuthenticated,(req, res) => {
-    res.send("Tinder For Pets - LOGGED IN COMPLETE");
+    res.status(200).json("Tinder For Pets - LOGGED IN COMPLETE");
   });
 
   app.get('/auth/fail', (req, res) => {
@@ -25,16 +20,12 @@ const installPassport = (app) => {
   });
 
   app.get('/auth/registered', (req, res) => {
-    res.send("Tinder For Pets - You already have an account. Go to /login");
+    res.status(200).json("Tinder For Pets - You already have an account. Go to /login");
   });
 
   app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/");
-  });
-
-  app.get("/me", ensureAuthenticated, function (req, res) {
-    res.json(req.user);
   });
 
   app.post("/register", function (req, res) {

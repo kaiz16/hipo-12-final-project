@@ -11,7 +11,7 @@ const petSchema = new Schema({
   },
   userId: {
     type: String,
-    required: true
+    required: true,
   },
   image: {
     type: String,
@@ -19,9 +19,22 @@ const petSchema = new Schema({
   city: {
     type: String,
   },
+  type: {
+    type: String,
+  },
+  breed: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
+  },
+  personalities: {
+    type: Array,
+    default: () => [],
   },
 });
 
