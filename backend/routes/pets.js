@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const Pets = require("../Models/Pets.js");
+const { Pets } = require("../Models/Pets.js");
 const Personalities = require("../Models/Personalities.js");
 const Matches = require("../Models/Matches.js");
 const Meetups = require("../Models/Meetups.js");
@@ -46,7 +46,7 @@ router.post("/pets/create", ensureAuthenticated, async (req, res) => {
 router.post("/pets/update/:petId", ensureAuthenticated, async (req, res) => {
   let { name, city, personalities, type, breed, bio } = req.body;
   personalities = await filterPersonalities(personalities);
-  const filter = { _id: req.params.petId };
+  const filter = { _id: req.params.petId, userId: req.user.id };
   const pet = await Pets.findOneAndUpdate(
     filter,
     {

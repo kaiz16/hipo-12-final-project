@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Pets = require("../Models/Pets.js");
+const { Pets } = require("../Models/Pets.js");
 
 const { ensureAuthenticated } = require("./auth.js");
 
@@ -44,8 +44,11 @@ router.get("/matches/:petId", ensureAuthenticated, async (req, res) => {
     });
     matches = [...matches, ...PETS_BY_PERSONALITY];
   }
-
-  res.json(matches);
+  // remove duplicates
+  let uniq = matches.filter(function({_id}) {
+    return !this[_id] && (this[_id] = _id)
+  }, {})
+  res.json(uniq);
 });
 
 module.exports = router;

@@ -1,28 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const FavouritePets = require("../Models/FavouritePets.js");
+const { Pets } = require("../Models/Pets.js");
 const { ensureAuthenticated } = require("./auth.js");
 // ? makes the route parameter optional
 router.get("/favourites", ensureAuthenticated, async (req, res) => {
   let favourites = await FavouritePets.find({
-    userId: req.user.id,
+    user_id: req.user.id,
   });
   res.json(favourites);
 });
 
 router.get("/favourites/:petId", ensureAuthenticated, async (req, res) => {
   let favourite = await FavouritePets.find({
-    userId: req.user.id,
-    petId: req.params.petId,
+    user_id: req.user.id,
+    "pet._id": req.params.petId,
   });
   res.json(favourite);
 });
 // ? makes the route parameter optional
 router.post("/favourites/create", ensureAuthenticated, async (req, res) => {
   let { petId } = req.body;
+  let pet = await Pets.find({ _id: petId });
+  if (!pet[0]) {
+    return res.status(400).json("Pet with that id doesn't exist");
+  }
   let favourite = new FavouritePets({
-    petId,
-    userId: req.user.id,
+    pet: pet[0],
+    user_id: req.user._id,
   });
   await favourite.save();
   res.json(favourite);

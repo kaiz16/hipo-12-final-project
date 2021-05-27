@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const { petSchema } = require('./Pets.js')
 
 const favouritePets = new Schema({
-    petId: {
-      type: String,
-      required: true,
-    },
-    userId: {
+    pet: petSchema,
+    user_id: {
       type: String,
       required: true
     },

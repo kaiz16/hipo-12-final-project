@@ -14,7 +14,8 @@ const petSchema = new Schema({
     required: true,
   },
   image: {
-    type: String,
+    data: Buffer,
+    contentType: String,
   },
   city: {
     type: String,
@@ -38,4 +39,5 @@ const petSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("pets", petSchema);
+const Pets = mongoose.model("pets", petSchema);
+module.exports = { Pets, petSchema };
