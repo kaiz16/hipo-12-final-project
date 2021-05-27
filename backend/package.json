@@ -2,8 +2,9 @@
   "name": "tinder-for-pets-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node server.js"
   },
@@ -23,5 +24,8 @@
     "passport-local-mongoose": "^6.1.0",
     "passport-oauth2": "^1.5.0",
     "passport-oauth2-client-password": "^0.1.2"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }
