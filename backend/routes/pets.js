@@ -27,7 +27,7 @@ router.get("/pets/:userId?", ensureAuthenticated, async (req, res) => {
 
 router.post("/pets/create", ensureAuthenticated, async (req, res) => {
   let { name, userId, city, personalities, type, breed, bio } = req.body;
-  personalities = filterPersonalities(personalities);
+  personalities = await filterPersonalities(personalities);
   const pet = new Pets({
     name,
     userId,
