@@ -15,8 +15,9 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
-
+app.enable('trust proxy');
 var sessionOptions = {
+  proxy: true,
   saveUninitialized: false, // saved new sessions
   resave: false, // do not automatically write to the session store
   store: new MongoStore({
