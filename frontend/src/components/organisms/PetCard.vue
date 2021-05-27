@@ -4,7 +4,11 @@
       <h3>{{ pet.name }}</h3>
     </template>
     <template #img>
-      <img :src="require('@/images/scottish-terrier.jpeg')" alt="" />
+     <vs-avatar size="500">
+      <template #text>
+        {{ pet.name }}
+      </template>
+    </vs-avatar>
     </template>
     <template #text>
       <p>
@@ -21,7 +25,7 @@
       >
         <i class="bx bx-heart"></i>
       </vs-button>
-      <vs-button @click="editingPet = true">
+      <vs-button v-if="canEdit" @click="editingPet = true">
         <i class="bx bx-pencil"></i>
       </vs-button>
 
@@ -58,6 +62,9 @@ export default {
     isFavourited() {
       return Boolean(this.favourite?._id);
     },
+    canEdit(){
+      return this.pet.userId === this.$auth.user._id
+    }
   },
   mounted() {
     this.isPetFavourited();

@@ -54,9 +54,11 @@ export default {
 
       if (hasDark) {
         body.classList.remove("dark");
+        body.style.color = null
         body.setAttribute("vs-theme", "white");
       } else {
         body.classList.add("dark");
+        body.style.color = 'white'
         body.setAttribute("vs-theme", "dark");
       }
     },

@@ -1,14 +1,13 @@
 <template>
   <div id="profile-card">
-    
-    <vs-avatar style="height: 100px; width: 100px">
-      <template #text>
-        Lily
+    <vs-avatar size="100">
+     <template #text>
+        {{ $auth.user.name || $auth.user.username }}
       </template>
     </vs-avatar>
-    <h3>{{ $auth.user.username }}</h3>
+    
     <div class="center">
-      <p>{{ $auth.user.email }}</p>
+      <p class="text">{{ $auth.user.email }}</p>
     </div>
   </div>
 </template>

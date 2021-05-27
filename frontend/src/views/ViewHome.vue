@@ -49,7 +49,10 @@ export default {
 
         this.matches = [...this.matches, ...matches.data];
       }
-
+      // remove duplicates
+      this.matches = this.matches.filter(function({ _id }) {
+        return !this[_id] && (this[_id] = _id);
+      }, {});
       this.loading = false;
     },
   },
