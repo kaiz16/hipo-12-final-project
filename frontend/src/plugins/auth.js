@@ -22,7 +22,7 @@ const Auth = () => {
       async fetchUser() {
         try {
           const { data } = await axios({
-            url: "http://localhost:8080/me",
+            url: "https://tinder-for-pets-api.herokuapp.com/me",
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const Auth = () => {
       async register({ email, username, password }) {
         try {
           await axios({
-            url: "http://localhost:8080/register",
+            url: "https://tinder-for-pets-api.herokuapp.com/register",
             method: "POST",
             data: {
               email,
@@ -59,7 +59,7 @@ const Auth = () => {
       async login({ email, username, password }) {
         try {
           await axios({
-            url: "http://localhost:8080/login",
+            url: "https://tinder-for-pets-api.herokuapp.com/login",
             method: "POST",
             data: {
               email,
@@ -79,7 +79,7 @@ const Auth = () => {
       async logout() {
         try {
           await axios({
-            url: "http://localhost:8080/logout",
+            url: "https://tinder-for-pets-api.herokuapp.com/logout",
             method: "GET",
             headers: {
               "Content-Type": "application/json",

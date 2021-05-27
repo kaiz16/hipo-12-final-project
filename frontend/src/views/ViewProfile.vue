@@ -46,7 +46,7 @@ export default {
     },
     async fetchUserPets() {
       const { data } = await axios({
-        url: "http://localhost:8080/pets/" + this.$auth.user._id,
+        url: "https://tinder-for-pets-api.herokuapp.com/pets/" + this.$auth.user._id,
         method: "GET",
         withCredentials: true,
       });

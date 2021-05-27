@@ -71,7 +71,7 @@ export default {
       this.loadingPersonalities = true;
       try {
         const { data } = await axios({
-          url: "http://localhost:8080/personalities",
+          url: "https://tinder-for-pets-api.herokuapp.com/personalities",
           method: "GET",
           withCredentials: true,
         });
@@ -86,7 +86,7 @@ export default {
       try {
         this.addPetLoading = true;
         const { data } = await axios({
-          url: "http://localhost:8080/pets/create",
+          url: "https://tinder-for-pets-api.herokuapp.com/pets/create",
           method: "POST",
           data: {
             name: this.name,

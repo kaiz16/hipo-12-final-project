@@ -35,7 +35,7 @@ export default {
     async getFavs() {
       this.loading = true;
       const { data } = await axios({
-        url: "http://localhost:8080/favourites",
+        url: "https://tinder-for-pets-api.herokuapp.com/favourites",
         method: "GET",
         withCredentials: true,
       });

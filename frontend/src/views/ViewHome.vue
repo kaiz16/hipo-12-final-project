@@ -33,7 +33,7 @@ export default {
       this.loading = true;
       // First get all user pets
       const { data } = await axios({
-        url: "http://localhost:8080/pets/" + this.$auth.user._id,
+        url: "https://tinder-for-pets-api.herokuapp.com/pets/" + this.$auth.user._id,
         method: "GET",
         withCredentials: true,
       });
@@ -42,7 +42,7 @@ export default {
       for (let x = 0; x < data.length; x++) {
         let pet = data[x];
         const matches = await axios({
-          url: "http://localhost:8080/matches/" + pet._id,
+          url: "https://tinder-for-pets-api.herokuapp.com/matches/" + pet._id,
           method: "GET",
           withCredentials: true,
         });

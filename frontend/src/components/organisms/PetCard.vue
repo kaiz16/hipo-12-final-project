@@ -74,7 +74,7 @@ export default {
       try {
         this.loading = true;
         const { data } = await axios({
-          url: "http://localhost:8080/favourites/" + this.pet._id,
+          url: "https://tinder-for-pets-api.herokuapp.com/favourites/" + this.pet._id,
           method: "GET",
           withCredentials: true,
         });
@@ -90,7 +90,7 @@ export default {
         this.loading = true;
         // eslint-disable-next-line
         const { data } = await axios({
-          url: "http://localhost:8080/favourites/create",
+          url: "https://tinder-for-pets-api.herokuapp.com/favourites/create",
           method: "POST",
           data: {
             petId: this.pet._id,
@@ -108,7 +108,7 @@ export default {
     async unfavouritePet() {
       try {
         await axios({
-          url: "http://localhost:8080/favourites/delete",
+          url: "https://tinder-for-pets-api.herokuapp.com/favourites/delete",
           method: "POST",
           data: {
             id: this.favourite._id,
