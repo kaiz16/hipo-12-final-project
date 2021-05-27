@@ -2,7 +2,7 @@ const express = require('express');
 
 const connectHistoryApiFallback = require('connect-history-api-fallback')
 // server static library
-// this will serve index.html
+// this will serve static files
 const serveStatic = require("serve-static")
 // 
 const path = require('path');
