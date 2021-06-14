@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { Pets } = require("../Models/Pets.js");
 
-const { ensureAuthenticated } = require("./auth.js");
+const { verifyToken } = require("../functions/verifyToken");
 
-router.get("/matches/:petId", ensureAuthenticated, async (req, res) => {
+router.get("/matches/:petId", verifyToken, async (req, res) => {
   const PET = await Pets.find({
-    $and: [{ userId: { $eq: req.user.id } }, { _id: req.params.petId }],
+    $and: [{ userId: { $eq: req.user._id } }, { _id: req.params.petId }],
   });
   let matches = [];
   let personalities = PET[0].personalities;

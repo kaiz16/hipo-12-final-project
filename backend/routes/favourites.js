@@ -2,16 +2,16 @@ const express = require("express");
 const router = express.Router();
 const FavouritePets = require("../Models/FavouritePets.js");
 const { Pets } = require("../Models/Pets.js");
-const { ensureAuthenticated } = require("./auth.js");
+const { verifyToken } = require("../functions/verifyToken");
 // ? makes the route parameter optional
-router.get("/favourites", ensureAuthenticated, async (req, res) => {
+router.get("/favourites", verifyToken, async (req, res) => {
   let favourites = await FavouritePets.find({
     user_id: req.user.id,
   });
   res.json(favourites);
 });
 
-router.get("/favourites/:petId", ensureAuthenticated, async (req, res) => {
+router.get("/favourites/:petId", verifyToken, async (req, res) => {
   let favourite = await FavouritePets.find({
     user_id: req.user.id,
     "pet._id": req.params.petId,
@@ -19,7 +19,7 @@ router.get("/favourites/:petId", ensureAuthenticated, async (req, res) => {
   res.json(favourite);
 });
 // ? makes the route parameter optional
-router.post("/favourites/create", ensureAuthenticated, async (req, res) => {
+router.post("/favourites/create", verifyToken, async (req, res) => {
   let { petId } = req.body;
   let pet = await Pets.find({ _id: petId });
   if (!pet[0]) {
@@ -33,7 +33,7 @@ router.post("/favourites/create", ensureAuthenticated, async (req, res) => {
   res.json(favourite);
 });
 
-router.post("/favourites/delete", ensureAuthenticated, async (req, res) => {
+router.post("/favourites/delete", verifyToken, async (req, res) => {
   let { id } = req.body;
   await FavouritePets.findOneAndDelete({ _id: id });
   res.json("Ok");
