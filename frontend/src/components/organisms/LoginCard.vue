@@ -7,11 +7,10 @@
       <img src="/foto5.png" alt="" />
     </template>
     <template #text>
-      <vs-input v-model="username" placeholder="Username" />
       <vs-input v-model="email" placeholder="Email" />
 
       <vs-input v-model="password" type="password" placeholder="Password" />
-      <vs-button @click="$auth.login({ email, username, password })">
+      <vs-button @click="$auth.login({ email, password })">
         Login
       </vs-button>
       <p>
@@ -27,7 +26,6 @@
 export default {
   data() {
     return {
-      username: "",
       email: "",
       password: "",
     };

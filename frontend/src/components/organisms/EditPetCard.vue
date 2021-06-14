@@ -3,10 +3,7 @@
     <template #header>
       <h3>{{ pet.name }}</h3>
     </template>
-
     <vs-input v-model="pet.name" placeholder="Name" />
-    <vs-input v-model="pet.type" placeholder="What type of pet? Eg: dog, cat" />
-    <vs-input v-model="pet.breed" placeholder="Breed" />
     <vs-input v-model="pet.bio" placeholder="Bio" type="textarea" />
     <vs-select
       multiple
@@ -70,9 +67,12 @@ export default {
       this.loadingPersonalities = true;
       try {
         const { data } = await axios({
-          url: "https://tinder-for-pets-api.herokuapp.com/personalities",
+          url: this.$api + "/personalities",
           method: "GET",
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
         });
         this.allPersonalities = data;
       } catch (e) {
@@ -85,16 +85,17 @@ export default {
       try {
         this.savePetLoading = true;
         const { data } = await axios({
-          url: "https://tinder-for-pets-api.herokuapp.com/pets/update/" + this.pet._id,
+          url: this.$api + "/pets/update/" + this.pet._id,
           method: "POST",
           data: {
             name: this.pet.name,
             personalities: this.pet.personalities,
-            type: this.pet.type,
-            breed: this.pet.breed,
             bio: this.pet.bio,
           },
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
         });
         this.$emit("cancel", data);
       } catch (e) {
@@ -106,5 +107,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

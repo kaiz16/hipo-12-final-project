@@ -7,7 +7,7 @@ import "boxicons/css/boxicons.min.css";
 import "vuesax/dist/vuesax.css"; //Vuesax styles
 import { routes } from "./router/routes";
 import { authPlugin } from "@/plugins/auth";
-
+import { API } from '../config.json'
 Vue.config.productionTip = false;
 import "./styles/styles.css";
 Vue.use(Vuesax, {
@@ -16,6 +16,7 @@ Vue.use(Vuesax, {
 Vue.use(authPlugin);
 
 Vue.use(VueRouter);
+Vue.prototype.$api = API;
 const router = new VueRouter({
   routes, // short for `routes: routes`
   mode: "history",

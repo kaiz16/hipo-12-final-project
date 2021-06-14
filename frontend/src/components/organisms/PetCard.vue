@@ -4,11 +4,11 @@
       <h3>{{ pet.name }}</h3>
     </template>
     <template #img>
-     <vs-avatar size="500">
-      <template #text>
-        {{ pet.name }}
-      </template>
-    </vs-avatar>
+      <vs-avatar size="500">
+        <template #text>
+          {{ pet.name }}
+        </template>
+      </vs-avatar>
     </template>
     <template #text>
       <p>
@@ -62,9 +62,9 @@ export default {
     isFavourited() {
       return Boolean(this.favourite?._id);
     },
-    canEdit(){
-      return this.pet.userId === this.$auth.user._id
-    }
+    canEdit() {
+      return this.pet.userId === this.$auth.user._id;
+    },
   },
   mounted() {
     this.isPetFavourited();
@@ -74,9 +74,12 @@ export default {
       try {
         this.loading = true;
         const { data } = await axios({
-          url: "https://tinder-for-pets-api.herokuapp.com/favourites/" + this.pet._id,
+          url: this.$api + "/favourites/" + this.pet._id,
           method: "GET",
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
         });
         this.favourite = data[0];
       } catch (e) {
@@ -90,13 +93,16 @@ export default {
         this.loading = true;
         // eslint-disable-next-line
         const { data } = await axios({
-          url: "https://tinder-for-pets-api.herokuapp.com/favourites/create",
+          url: this.$api + "/favourites/create",
           method: "POST",
           data: {
             petId: this.pet._id,
             userId: this.$auth.user._id,
           },
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
         });
         this.isPetFavourited();
       } catch (e) {
@@ -108,12 +114,15 @@ export default {
     async unfavouritePet() {
       try {
         await axios({
-          url: "https://tinder-for-pets-api.herokuapp.com/favourites/delete",
+          url: this.$api + "/favourites/delete",
           method: "POST",
           data: {
             id: this.favourite._id,
           },
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
         });
 
         this.isPetFavourited();

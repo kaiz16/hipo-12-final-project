@@ -1,6 +1,7 @@
 import Vue from "vue";
 import axios from "axios";
 let instance;
+let authKey = "auth";
 const Auth = () => {
   if (instance) return instance;
 
@@ -19,29 +20,35 @@ const Auth = () => {
       },
     },
     methods: {
+      getAuthorizationHeader() {
+        return {
+          authorization: localStorage.getItem(authKey),
+        };
+      },
       async fetchUser() {
         try {
           const { data } = await axios({
-            url: "https://tinder-for-pets-api.herokuapp.com/me",
+            url: this.$api + "/me",
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              ...this.getAuthorizationHeader(),
             },
-            withCredentials: true,
           });
-          console.log(data);
+          console.log(data)
           this.user = data;
-          return this.user
+          return this.user;
         } catch (e) {
           console.error(e);
         }
       },
-      async register({ email, username, password }) {
+      async register({ name, email, username, password }) {
         try {
           await axios({
-            url: "https://tinder-for-pets-api.herokuapp.com/register",
+            url: this.$api + "/register",
             method: "POST",
             data: {
+              name,
               email,
               username,
               password,
@@ -49,28 +56,26 @@ const Auth = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            withCredentials: true,
           });
           window.location.reload();
         } catch (e) {
           console.error(e);
         }
       },
-      async login({ email, username, password }) {
+      async login({ email, password }) {
         try {
-          await axios({
-            url: "https://tinder-for-pets-api.herokuapp.com/login",
+          const { data } = await axios({
+            url: this.$api + "/login",
             method: "POST",
             data: {
               email,
-              username,
               password,
             },
             headers: {
               "Content-Type": "application/json",
             },
-            withCredentials: true,
           });
+          localStorage.setItem(authKey, data.token);
           window.location.reload();
         } catch (e) {
           console.error(e);
@@ -78,14 +83,7 @@ const Auth = () => {
       },
       async logout() {
         try {
-          await axios({
-            url: "https://tinder-for-pets-api.herokuapp.com/logout",
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          });
+          localStorage.removeItem(authKey);
           window.location.reload();
         } catch (e) {
           console.error(e);

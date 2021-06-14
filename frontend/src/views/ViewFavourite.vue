@@ -1,7 +1,11 @@
 <template>
   <Loading v-if="loading"></Loading>
   <section v-else-if="loading === false && favourites.length">
-    <div v-for="favourite in favourites" :key="favourite._id" style="margin: 10px">
+    <div
+      v-for="favourite in favourites"
+      :key="favourite._id"
+      style="margin: 10px"
+    >
       <PetCard :pet="favourite.pet" />
     </div>
   </section>
@@ -35,9 +39,12 @@ export default {
     async getFavs() {
       this.loading = true;
       const { data } = await axios({
-        url: "https://tinder-for-pets-api.herokuapp.com/favourites",
+        url: this.$api + "/favourites",
         method: "GET",
-        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          ...this.$auth.getAuthorizationHeader(),
+        },
       });
       this.favourites = data;
       this.loading = false;

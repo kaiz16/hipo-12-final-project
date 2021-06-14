@@ -5,9 +5,33 @@
     </template>
 
     <vs-input v-model="name" placeholder="Name" />
-    <vs-input v-model="type" placeholder="Type" />
-    <vs-input v-model="breed" placeholder="Breed" />
     <vs-input v-model="bio" placeholder="Bio" />
+    <vs-select :loading="loadingTypes" placeholder="Type" v-model="type">
+      <vs-option
+        v-for="(type, i) in allTypes"
+        :key="i"
+        :label="type.type"
+        :value="type.type"
+      >
+        {{ type.type }}
+      </vs-option>
+    </vs-select>
+    <vs-select
+      v-if="breeds.length"
+      :loading="loadingTypes"
+      placeholder="Breed"
+      v-model="breed"
+    >
+      <vs-option
+        v-for="(breed, i) in breeds"
+        :key="i"
+        :label="breed"
+        :value="breed"
+      >
+        {{ breed }}
+      </vs-option>
+    </vs-select>
+
     <vs-select
       multiple
       :loading="loadingPersonalities"
@@ -50,7 +74,9 @@ export default {
       personalities: [],
       addPetLoading: false,
       loadingPersonalities: true,
+      loadingTypes: true,
       allPersonalities: [],
+      allTypes: [],
     };
   },
   computed: {
@@ -62,18 +88,26 @@ export default {
         this.$emit("input", val);
       },
     },
+    breeds() {
+      if (!this.type) return [];
+      return this.allTypes.filter((type) => type.type === this.type)[0].breeds;
+    },
   },
   mounted() {
     this.getAllPersonalities();
+    this.getTypes();
   },
   methods: {
     async getAllPersonalities() {
       this.loadingPersonalities = true;
       try {
         const { data } = await axios({
-          url: "https://tinder-for-pets-api.herokuapp.com/personalities",
+          url: this.$api + "/personalities",
           method: "GET",
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
         });
         this.allPersonalities = data;
       } catch (e) {
@@ -82,11 +116,29 @@ export default {
         this.loadingPersonalities = false;
       }
     },
+    async getTypes() {
+      this.loadingTypes = true;
+      try {
+        const { data } = await axios({
+          url: this.$api + "/types",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
+        });
+        this.allTypes = data;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.loadingTypes = false;
+      }
+    },
     async addPet() {
       try {
         this.addPetLoading = true;
         const { data } = await axios({
-          url: "https://tinder-for-pets-api.herokuapp.com/pets/create",
+          url: this.$api + "/pets/create",
           method: "POST",
           data: {
             name: this.name,
@@ -96,7 +148,10 @@ export default {
             bio: this.bio,
             userId: this.$auth.user._id,
           },
-          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            ...this.$auth.getAuthorizationHeader(),
+          },
         });
         this.$emit("cancel", data);
       } catch (e) {
